@@ -232,7 +232,16 @@ isr_stub_33:
     mov eax,0
     mov dx,0x60
     in al,dx
-    mov [currChar],al
+    push ax
+    mov rbx,0
+    mov bl,[charLimit]
+    mov rax,charBuffer
+    add rax,rbx
+    pop bx
+    mov [rax],bl
+    mov bl,[charLimit]
+    add bl,1
+    mov [charLimit],bl
     call sendEndIRQ
     iretq
 isr_IRQ_stub    34
@@ -243,9 +252,6 @@ isr_IRQ_stub    38
 isr_IRQ_stub    39
 isr_IRQ_stub    40
 
-global currChar
-currChar: db 0x00
-
 global isr_stub_table
 isr_stub_table:
 %assign i 0 
@@ -253,3 +259,71 @@ isr_stub_table:
     DQ isr_stub_%+i
 %assign i i+1
 %endrep
+
+keyMap: db 0x00	;doesn't exist
+    db 0x1B	;esc
+    db 0x31	;1
+    db 0x32	;2
+    db 0x33	;3
+    db 0x34	;4
+    db 0x35	;5
+    db 0x36	;6
+    db 0x37	;7
+    db 0x38	;8
+    db 0x39	;9
+    db 0x30	;0
+    db 0x2D	;-
+    db 0x3D	;=
+    db 0x08	;backspace
+    db 0x09	;tab
+    db 0x71	;q
+    db 0x77	;w
+    db 0x65	;e
+    db 0x72	;r
+    db 0x74	;t
+    db 0x79	;y
+    db 0x75	;u
+    db 0x69	;i
+    db 0x6F	;o
+    db 0x70	;p
+    db 0x5B	;[
+    db 0x5D	;]
+    db 0x0A	;enter
+    db 0x00	;control
+    db 0x61	;a
+    db 0x73	;s
+    db 0x64	;d
+    db 0x66	;f
+    db 0x67	;g
+    db 0x68	;h
+    db 0x6A	;j
+    db 0x6B	;k
+    db 0x6C	;l
+    db 0x3B	;;
+    db 0x27	;'
+    db 0x60	;`
+    db 0x00 ;left shift
+    db 0x5c ;"\"
+    db 0x7a ;z
+    db 0x78	;x
+    db 0x63	;c
+    db 0x76	;v
+    db 0x62	;b
+    db 0x6e	;n
+    db 0x6d	;m
+    db 0x2c ;,
+    db 0x2e	;.
+    db 0x2f	;/
+    db 0x00	;right shift
+    db 0x00	;keypad *
+    db 0x00	;alt
+    db 0x20	;space
+    db 0x00	;capslock
+
+    section .bss
+    global charBufferPointer
+    charBufferPointer: resb 1
+    global charLimit
+    charLimit: resb 1
+    global charBuffer
+    charBuffer: resb 256

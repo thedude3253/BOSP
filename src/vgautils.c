@@ -101,3 +101,7 @@ void printHex(unsigned long h) {
         }
     }
 }
+
+void subCursor(int value) {
+    moveCursor(cursorX - value, cursorY);
+}

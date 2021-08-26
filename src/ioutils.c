@@ -21,3 +21,17 @@ void poke(intptr_t address, unsigned char byte) {
     byte2 = (uint8_t *)address;
     *byte2 = byte;
 }
+extern uint8_t charBufferPointer;
+extern uint8_t charLimit;
+extern uint8_t charBuffer[];
+unsigned char getKey() {
+    uint8_t ret;
+    if(charLimit == charBufferPointer) {
+        ret = 0x00;
+    }
+    else {
+        ret = charBuffer[charBufferPointer];
+        charBufferPointer++;
+    }
+    return ret;
+}

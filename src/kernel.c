@@ -17,7 +17,6 @@ typedef struct idt_entry {
 idt_entry IDT[256];
 idtr IDTR;
 extern void *isr_stub_table[];
-extern uint8_t currChar;
 void set_descriptor(uint8_t vector, void *isr, uint8_t flags) {
     idt_entry *descriptor = &IDT[vector];
     descriptor->offset_low = (uint64_t)isr & 0xFFFF;    //takes the lowest 16 bits of the address
@@ -47,13 +46,13 @@ void _start() {
     println("Special thanks to Terry A. Davis");
     initIDT();
     print("\n>");
-    printHex(0xDEADBEEFDEADBEEF);
     while(1) {
-        if(currChar != 0) {
-            //printByte(currChar);
-            moveCursor(1,5);
-            currChar = 0;
+        moveCursor(0,0);
+        unsigned char key = getKey();
+        if(key != 0) {
+            printByte(key);
         }
     }
+    
     return;
 }
