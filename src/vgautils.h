@@ -8,4 +8,4 @@ void print(char *s);    //prints a string to the screen starting at the cursor p
 void println(char *s);  //calls print(char *s) followed by a printChar('\n')
 void printByte(uint8_t byte);   //prints a byte to the screen, formatted as a hexidecimal number
 void printHex(unsigned long byte);    //prints a hex value of an arbitrary size to the screen
-void subCursor(int value);
+void subCursor(int value);  //moves the cursor left by a given amount

@@ -32,28 +32,26 @@ unsigned char getKey() {
     uint8_t *vmem =(uint8_t *) 0xB8000;
     uint8_t trash = *vmem;
     *vmem = trash;
-   if(charBufferPointer == charLimit) return ret;
-   //if(charBufferPointer != charLimit) {
-       uint8_t key = charBuffer[charBufferPointer];
-       charBufferPointer = charBufferPointer + 1;
-       if(key == 0xAA) {
-           fakeBool = 0;
-           return 0x00;
-       }
-       if(key < 0x3A && key > 0) {
-           ret = keyMap[key];
-       }
-       if(ret == 0) {
-           if(key == 0x2A) {
-               fakeBool = 1;
-               return 0x00;
-           }
-       }
-       if(fakeBool > 0) {
-           if(ret > 0x60 && ret < 0x7B) {
-               ret = ret - 0x20;
-           }
-       }
-   //}
-   return ret;
+    if(charBufferPointer == charLimit) return ret;
+    uint8_t key = charBuffer[charBufferPointer];
+    charBufferPointer = charBufferPointer + 1;
+    if(key == 0xAA) {
+        fakeBool = 0;
+        return 0x00;
+    }
+    if(key < 0x3A && key > 0) {
+        ret = keyMap[key];
+    }
+    if(ret == 0) {
+        if(key == 0x2A) {
+            fakeBool = 1;
+            return 0x00;
+        }
+    }
+    if(fakeBool > 0) {
+        if(ret > 0x60 && ret < 0x7B) {
+            ret = ret - 0x20;
+        }
+    }
+    return ret;
 }

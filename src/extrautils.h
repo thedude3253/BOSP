@@ -1,1 +1,1 @@
-int stringEqu(char *s1, char *s2);
+int stringEqu(char *s1, char *s2);  //checks to see if the content of s1 is exactly equivelent to s2
