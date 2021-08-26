@@ -8,8 +8,8 @@ sendEndIRQ:
     mov dx,0x0020
     mov al,0x20
     out dx,al
-    mov dx,0x00A0
-    out dx,al
+    ;mov dx,0x00A0
+    ;out dx,al
     ret
 setCursorAsm:   ;bx - collumn (0-79) ax - row (0-24)
     mov [cursorX],bx

@@ -89,3 +89,15 @@ void printByte(uint8_t byte) {
         printChar((byte&0x0F) + 0x37);
     }
 }
+
+void printHex(unsigned long h) {
+    //split h into number of bytes
+    int s = sizeof(h);
+    for(int i = 0; i<s; ++i) {
+        printByte((h >> 8*(s-1-i)) & 0xFF);
+        printChar(' ');
+        if((i+1)%8 == 0) {
+            printChar(' ');
+        }
+    }
+}
