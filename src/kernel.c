@@ -36,8 +36,15 @@ void initIDT() {
     __asm__ volatile ("lidt %0" : : "memory"(IDTR)); // load the new IDT
     initPIC(0x20,0x28);
     __asm__ volatile ("sti"); // set the interrupt flag
-    println("IDT Initilized");
+    //println("IDT Initilized");
 }
+void parseCommand(char *s) {
+    printChar('\n');
+    print(s);
+}
+uint8_t mode = 0x01;
+unsigned char command[256];
+unsigned char pointer = 0x00;
 void _start() {
     setColor(0x10,0x0F);
     clearScreen();
@@ -45,12 +52,36 @@ void _start() {
     println("Designed by Jason Rowe");
     println("Special thanks to Terry A. Davis");
     initIDT();
-    print("\n>");
+    if(mode == 0x01) print("\n>");
     while(1) {
-        moveCursor(0,0);
+        //moveCursor(0,0);
+        
         unsigned char key = getKey();
-        if(key != 0) {
-            printByte(key);
+        if(key > 0) {
+            if(mode == 0x01) {
+                if(key == '\n') {
+                    char *temp = &command[1];
+                    parseCommand(temp);
+                    for(int i = 0; i<255; i++) {
+                        command[i] = 0;
+                    }
+                    pointer = 0;
+                    print("\n>");
+                }
+                else if(key == 0x08) {
+                    if(pointer > 0) {
+                        printChar(0x08);
+                        command[pointer] = 0;
+                        pointer--;
+                    }
+                }
+                else {
+                    printChar(key);
+                    pointer++;
+                    command[pointer] = key;
+                }
+            }
+            else printChar(key);
         }
     }
     

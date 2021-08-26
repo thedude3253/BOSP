@@ -260,6 +260,7 @@ isr_stub_table:
 %assign i i+1
 %endrep
 
+global keyMap
 keyMap: db 0x00	;doesn't exist
     db 0x1B	;esc
     db 0x31	;1

@@ -42,6 +42,11 @@ void printChar(unsigned char ascii) {
             printChar(' ');
         }
     }
+    else if(ascii == 0x08) {
+        subCursor(1);
+        printChar(' ');
+        subCursor(1);
+    }
     else {
     unsigned char cbyte = backgroundColor | foregroundColor;
     volatile uint16_t * position;
@@ -103,5 +108,12 @@ void printHex(unsigned long h) {
 }
 
 void subCursor(int value) {
-    moveCursor(cursorX - value, cursorY);
+    for(int i = 0; i<value; ++i) {
+        if(cursorX-1 < 0) {
+            moveCursor(79,cursorY-1);
+        }
+        else {
+            moveCursor(cursorX-1,cursorY);
+        }
+    }
 }
