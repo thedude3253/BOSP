@@ -36,7 +36,6 @@ void initIDT() {
     __asm__ volatile ("lidt %0" : : "memory"(IDTR)); // load the new IDT
     initPIC(0x20,0x28);
     __asm__ volatile ("sti"); // set the interrupt flag
-    //println("IDT Initilized");
 }
 void parseCommand(char *s) {
     printChar('\n');
@@ -48,14 +47,11 @@ unsigned char pointer = 0x00;
 void _start() {
     setColor(0x10,0x0F);
     clearScreen();
-    println("BaseDOS Project Version 0.2");
+    println("BaseDOS Project Version 0.3");
     println("Designed by Jason Rowe");
-    println("Special thanks to Terry A. Davis");
     initIDT();
     if(mode == 0x01) print("\n>");
     while(1) {
-        //moveCursor(0,0);
-        
         unsigned char key = getKey();
         if(key > 0) {
             if(mode == 0x01) {
@@ -84,6 +80,5 @@ void _start() {
             else printChar(key);
         }
     }
-    
     return;
 }
