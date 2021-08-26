@@ -12,6 +12,8 @@ void setColor(unsigned char back, unsigned char front) {
 }
 
 void moveCursor(int x, int y) {
+    if(x<0) x=0;
+    if(y<0) y=x=0;
     unsigned short pos = y * 80 + x;
     outb(0x03D4,0x0F);
     outb(0x03D5,(unsigned char)(pos & 0xFF));

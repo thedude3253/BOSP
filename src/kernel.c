@@ -1,6 +1,7 @@
 #include"vgautils.h"
 #include"picutils.h"
 #include"ioutils.h"
+#include"extrautils.h"
 typedef struct idtr {
     uint16_t limit; //Defines the length of the idt in bytes minus one. (minimum value is 0x100)
     uint64_t base;  //The linear address where the idt starts (INT 0)
@@ -37,13 +38,26 @@ void initIDT() {
     initPIC(0x20,0x28);
     __asm__ volatile ("sti"); // set the interrupt flag
 }
-void parseCommand(char *s) {
-    printChar('\n');
-    print(s);
-}
 uint8_t mode = 0x01;
 unsigned char command[256];
 unsigned char pointer = 0x00;
+void clearCommandBuffer() {
+    for(int i = 0; i<255; i++) {
+        command[i] = 0;
+    }
+    pointer = 0;
+}
+void parseCommand(char *s) {
+    if(stringEqu("text",s)) {
+        mode = 0;
+        clearCommandBuffer();
+        clearScreen();
+    }
+    else {
+        printChar('\n');
+        print(s);
+    }
+}
 void _start() {
     setColor(0x10,0x0F);
     clearScreen();
@@ -62,7 +76,7 @@ void _start() {
                         command[i] = 0;
                     }
                     pointer = 0;
-                    print("\n>");
+                    if(mode == 0x01)print("\n>");
                 }
                 else if(key == 0x08) {
                     if(pointer > 0) {
@@ -76,6 +90,11 @@ void _start() {
                     pointer++;
                     command[pointer] = key;
                 }
+            }
+            else if(key == 0x1B) {
+                mode = 1;
+                clearScreen();
+                print("\n>");
             }
             else printChar(key);
         }
