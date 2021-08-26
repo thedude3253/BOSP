@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "stdint.h": "c",
+        "idtutils.h": "c",
+        "ioutils.h": "c"
+    }
+}
