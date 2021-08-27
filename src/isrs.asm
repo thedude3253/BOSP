@@ -4,6 +4,40 @@ cursorY: dw 0x0000
 
 backgroundColor: db 0x10
 foregroundColor: db 0x0F
+
+temp: dq 0
+temp2: dq 0
+pushAll:    ;pushes general-purpose registers onto the stack
+    mov [temp],rax  ;moves a out of the way
+    mov rax,0   ;clears a
+    pop rax     ;pops the return address to a
+    pushf       ;flags
+    push rbx    ;b
+    push rcx    ;c
+    push rdx    ;d
+    push rdi    ;di
+    push rsi    ;si
+    mov rbx,[temp]  ;moves the original a to b
+    push rbx    ;pushes a's value through b
+    push rax    ;pushes the return addresss
+    ret
+
+popAll: ;assumes the stack is set up the way it is supposed to be through pushAll
+    pop rax
+    mov [temp],rax
+    pop rax
+    pop rsi
+    pop rdi
+    pop rdx
+    pop rcx
+    pop rbx
+    popf
+    mov [temp2],rax
+    mov rax,[temp]
+    push rax
+    mov rax,[temp2]
+    ret
+
 sendEndIRQ:
     mov dx,0x0020
     mov al,0x20
@@ -226,9 +260,17 @@ isr_no_err_stub 29
 isr_err_stub    30
 isr_no_err_stub 31
 isr_stub_32:
+    push rdx
+    push rax
     call sendEndIRQ
+    pop rax
+    pop rdx
     iretq
+
 isr_stub_33:
+    push rax
+    push rdx
+    push rbx
     mov eax,0
     mov dx,0x60
     in al,dx
@@ -243,6 +285,9 @@ isr_stub_33:
     add bl,1
     mov [charLimit],bl
     call sendEndIRQ
+    pop rbx
+    pop rdx
+    pop rax
     iretq
 isr_IRQ_stub    34
 isr_IRQ_stub    35

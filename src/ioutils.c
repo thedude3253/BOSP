@@ -29,9 +29,9 @@ unsigned char fakeBool = 0;
 unsigned char getKey() {
     unsigned char volatile ret;
     ret = 0x00;
-    uint8_t *vmem =(uint8_t *) 0xB8000;
-    uint8_t trash = *vmem;
-    *vmem = trash;
+    //uint8_t *vmem =(uint8_t *) 0xB8000;
+    //uint8_t trash = *vmem;
+    //*vmem = trash;
     if(charBufferPointer == charLimit) return ret;
     uint8_t key = charBuffer[charBufferPointer];
     charBufferPointer = charBufferPointer + 1;
