@@ -201,12 +201,14 @@ isr_stub_%+%1:
 %endmacro
 %macro isr_IRQ_stub 1
 isr_stub_%+%1:
+    call pushAll
     mov bx,0
     mov ax,2
     call setCursorAsm
     mov bl,%1
     call printByteAsm
     call sendEndIRQ
+    call popAll
     iretq
 %endmacro
 isr_no_err_stub 0
@@ -262,7 +264,9 @@ isr_no_err_stub 31
 isr_stub_32:
     push rdx
     push rax
-    call sendEndIRQ
+    mov dx,0x0020
+    mov al,0x20
+    out dx,al
     pop rax
     pop rdx
     iretq

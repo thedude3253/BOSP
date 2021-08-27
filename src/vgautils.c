@@ -119,3 +119,36 @@ void subCursor(int value) {
         }
     }
 }
+
+void printCharRaw(unsigned char c) {
+    unsigned char cbyte = backgroundColor | foregroundColor;
+    volatile uint16_t * position;
+    position = (volatile uint16_t *)0xb8000 + (cursorY*80 + cursorX);
+    *position = (cbyte << 8) | c;
+    incCursor();
+}
+void printDebug(char *str, uint8_t x, uint8_t y) {
+    uint8_t xstore = cursorX;
+    uint8_t ystore = cursorY;
+    char *temp = str;
+    moveCursor(x,y);
+    printChar('$');
+    while(*str) {
+        printCharRaw(*str++);
+    }
+    printChar('%');
+    moveCursor(xstore,ystore);
+}
+
+int tabFunction() {
+    int ret = 0;
+    if(cursorX%4 == 0) {
+        printChar(' ');
+        ret++;
+    }
+    while(cursorX%4) {
+        printChar(' ');
+        ret++;
+    }
+    return ret;
+}

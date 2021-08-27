@@ -9,3 +9,5 @@ void println(char *s);  //calls print(char *s) followed by a printChar('\n')
 void printByte(uint8_t byte);   //prints a byte to the screen, formatted as a hexidecimal number
 void printHex(unsigned long byte);    //prints a hex value of an arbitrary size to the screen
 void subCursor(int value);  //moves the cursor left by a given amount
+int tabFunction();
+void printDebug(char *str, uint8_t x, uint8_t y);   //prints a string to an arbitrary point on screen. Cursor position is reset to exactly where it was before the function was called

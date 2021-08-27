@@ -58,6 +58,7 @@ void parseCommand(char *s) {
         print(s);
     }
 }
+
 void _start() {
     setColor(0x10,0x0F);
     clearScreen();
@@ -85,6 +86,14 @@ void _start() {
                         pointer--;
                     }
                 }
+                else if(key == '\t') {
+                    int tempInt = tabFunction();
+                    while(tempInt) {
+                        pointer++;
+                        command[pointer] = ' ';
+                        tempInt--;
+                    }
+                }
                 else {
                     printChar(key);
                     pointer++;
@@ -97,6 +106,7 @@ void _start() {
                 print("\n>");
             }
             else printChar(key);
+            //printDebug((char *)&command[1],6,6);
         }
     }
     return;

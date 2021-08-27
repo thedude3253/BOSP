@@ -55,3 +55,16 @@ unsigned char getKey() {
     }
     return ret;
 }
+extern uint8_t heap;
+
+void initHeap() {
+    //TODO: write code
+}
+
+void *malloc(unsigned long long size) {
+    //TODO: write code
+}
+
+void free(void *mem) {
+    //TODO: write code
+}
