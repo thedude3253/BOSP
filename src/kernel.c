@@ -53,6 +53,14 @@ void parseCommand(char *s) {
         clearCommandBuffer();
         clearScreen();
     }
+    else if(stringEqu("help",s)) {
+        print("\nCommands:\nhelp - what you're running right now\ntext - activates the text editor/sandbox mode\njoke - says a funny");
+        clearCommandBuffer();
+    }
+    else if(stringEqu("joke",s)) {
+        print("\nbogos binted?");
+        clearCommandBuffer();
+    }
     else {
         printChar('\n');
         print(s);
