@@ -70,8 +70,9 @@ void parseCommand(char *s) {
 void _start() {
     setColor(0x10,0x0F);
     clearScreen();
-    println("BaseDOS Project Version 0.3");
+    println("BaseDOS Project Version 0.4");
     println("Designed by Jason Rowe");
+    println("Type help for a list of commands.");
     initIDT();
     if(mode == 0x01) print("\n>");
     while(1) {
