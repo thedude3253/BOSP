@@ -3,7 +3,7 @@ void sendEOI(unsigned char irqNum) {
     if(irqNum >= 8) outb(0xA0,0x20);
     outb(0x20,0x20);
 }
-void initPIC(int offset1, int offset2) {
+void initPIC(int offset1, int offset2) {    //note, I really should be using a wait function between these outs, yet here we are
     unsigned char a1,a2;
     a1 = inb(0x21); //grabs the master mask
     a2 = inb(0xA1); //grabs the slave mask

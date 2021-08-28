@@ -279,6 +279,9 @@ isr_stub_33:
     mov dx,0x60
     in al,dx
     push ax
+    ;push ax
+    ;pop bx
+    ;call printByteAsm
     mov rbx,0
     mov bl,[charLimit]
     mov rax,charBuffer

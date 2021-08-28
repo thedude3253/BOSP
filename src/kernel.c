@@ -94,6 +94,16 @@ void _start() {
                         tempInt--;
                     }
                 }
+                else if(key > 0xF0) {
+                    if(key == 0xF1 && pointer > 0) {
+                        printChar(key);
+                        pointer--;
+                    }
+                    if(key == 0xF3 && (command[pointer+1] != 0)) {
+                        printChar(key);
+                        pointer++;
+                    } 
+                }
                 else {
                     printChar(key);
                     pointer++;
@@ -106,7 +116,6 @@ void _start() {
                 print("\n>");
             }
             else printChar(key);
-            //printDebug((char *)&command[1],6,6);
         }
     }
     return;

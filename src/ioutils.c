@@ -29,12 +29,17 @@ unsigned char fakeBool = 0;
 unsigned char getKey() {
     unsigned char volatile ret;
     ret = 0x00;
-    //uint8_t *vmem =(uint8_t *) 0xB8000;
-    //uint8_t trash = *vmem;
-    //*vmem = trash;
     if(charBufferPointer == charLimit) return ret;
     uint8_t key = charBuffer[charBufferPointer];
     charBufferPointer = charBufferPointer + 1;
+    if(key == 0xE0) {
+        uint8_t key2 = charBuffer[charBufferPointer];
+        charBufferPointer = charBufferPointer + 1;
+        if(key2 == 0x4B) return 0xF1;
+        if(key2 == 0x48) return 0xF2;
+        if(key2 == 0x4D) return 0xF3;
+        if(key2 == 0x50) return 0xF4;
+    }
     if(key == 0xAA) {
         fakeBool = 0;
         return 0x00;

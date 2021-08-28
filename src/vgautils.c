@@ -14,6 +14,11 @@ void setColor(unsigned char back, unsigned char front) {
 void moveCursor(int x, int y) {
     if(x<0) x=0;
     if(y<0) y=x=0;
+    if(x>=80 && y>=24) {
+        x = 79;
+        y = 24;
+    }
+    if(y >= 25) y = 24;
     unsigned short pos = y * 80 + x;
     outb(0x03D4,0x0F);
     outb(0x03D5,(unsigned char)(pos & 0xFF));
@@ -32,9 +37,22 @@ void incCursor() {
     }
 }
 
+void arrowHandler(uint8_t keyCode) {
+    if(keyCode == 0xF1) {
+        subCursor(1);
+    }
+    else if(keyCode == 0xF2) moveCursor(cursorX,cursorY-1);
+    else if(keyCode == 0xF3) incCursor();
+    else if(keyCode == 0xF4) moveCursor(cursorX,cursorY+1);
+}
+
 void printChar(unsigned char ascii) {
     if(ascii == '\n') {
         moveCursor(0,cursorY+1);
+    }
+    else if(ascii > 0xF0) {
+        arrowHandler(ascii);
+        return;
     }
     else if(ascii == '\t') {
         if(cursorX%4 == 0) {
