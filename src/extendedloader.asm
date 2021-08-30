@@ -17,6 +17,11 @@ extendedBootloader:
 	jmp codeseg:start32	;then we make the jump to 32 bit commands. This is done by a far jump, which loads the necessary code into the code segment and executes it there
 	jmp $
 
+detectRAM:	;We need to detect how much memory we have access to, so we can set up a heap for applications to use.
+
+	mov eax,0x0000e820
+	mov 
+
 gdt_nulldesc:
 	dd 0
 	dd 0

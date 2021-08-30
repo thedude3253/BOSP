@@ -7,3 +7,7 @@ unsigned char getKey();    //returns an ascii or control code recieved by the ke
 void *malloc(unsigned long long size); //Returns a pointer to a chunk of memory of the size given (in bytes)
 void free(void *mem);   //frees the memory assigned to that address
 void initHeap();    //Bootstraps the heap
+void readDisk(int drive, uint32_t offset, void *destination);    //Reads from the specified disk
+void writeDisk(int drive, uint32_t offset, void *source);   //Writes to the specified disk
+void *getBlock();   //Grabs one 256 byte block of data
+void freeBlock();   //Returns a block at an address to the wild

@@ -1,4 +1,5 @@
-section .bss
-align 0x1000
+section .heap
 global heap
-heap: resb 4096
+global freeMemory
+freeMemory: dw 0x1000   ;This is supposed to use a BIOS interrupt to determine how much heapspace we have, for now just hard coded
+heap:

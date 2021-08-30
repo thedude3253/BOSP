@@ -61,9 +61,23 @@ unsigned char getKey() {
     return ret;
 }
 extern uint8_t heap;
+extern uint16_t freeMemory;
+
+typedef struct memoryBlock {
+    uint8_t used;
+    uint8_t *startAddress;
+} memoryBlock;
+
+memoryBlock heapMap[16];
 
 void initHeap() {
-    //TODO: write code
+    uint16_t freeBlocks = freeMemory / 0x100;
+    uint8_t *heapStart = &heap;
+    for(int i = 0; i<freeBlocks; ++i) {
+        memoryBlock *block = &heapMap[i];
+        block->used = 0;
+        block->startAddress = heapStart + (i*0x100);
+    }
 }
 
 void *malloc(unsigned long long size) {
@@ -72,4 +86,23 @@ void *malloc(unsigned long long size) {
 
 void free(void *mem) {
     //TODO: write code
+}
+
+void *getBlock() {
+    for(int i = 0; i<16; ++i) {
+        if(heapMap[i].used == 0) {
+            heapMap[i].used = 1;
+            return heapMap[i].startAddress;
+        }
+    }
+    return 0;
+}
+
+void freeBlock(void *mem) {
+    for(int i = 0; i<16; ++i) {
+        if(heapMap[i].startAddress == mem) {
+            heapMap[i].used = 0;
+            return;
+        }
+    }
 }

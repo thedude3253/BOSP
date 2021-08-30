@@ -67,13 +67,29 @@ void parseCommand(char *s) {
     }
 }
 
+void test() {
+    uint8_t *int1 = getBlock();
+    printHex(int1);
+    uint16_t *int2 = getBlock();
+    printHex(int2);
+    freeBlock(int1);
+    uint8_t *int3 = getBlock();
+    printHex(int3);
+}
+
+extern uint16_t freeMemory;
 void _start() {
     setColor(0x10,0x0F);
     clearScreen();
     println("BaseDOS Project Version 0.4");
     println("Designed by Jason Rowe");
+    initHeap();
+    print("Number of free blocks: ");
+    printByte(freeMemory/0x100);
+    printChar('\n');
     println("Type help for a list of commands.");
     initIDT();
+    test();
     if(mode == 0x01) print("\n>");
     while(1) {
         unsigned char key = getKey();
