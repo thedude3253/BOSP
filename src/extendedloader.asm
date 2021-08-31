@@ -4,6 +4,7 @@ extendedBootloader:
 	;Note to self: If this turns out to take up less space than expected, put it inside the boot sector for ~efficency~
 	;First we need to enter Protected Mode
 	cli	;disables interrupts for the time being
+	call detectDrives	;figure out where things are
 	;next we enable A20 line, which lets us access more memory
 	in al,0x92	;xxxxxxxx
 	or al,0x02	;xxxxxx1x flicks on the twos bit
@@ -18,9 +19,22 @@ extendedBootloader:
 	jmp $
 
 detectRAM:	;We need to detect how much memory we have access to, so we can set up a heap for applications to use.
-
 	mov eax,0x0000e820
-	mov 
+	ret
+
+global floppyDrives
+floppyDrives: db 0x00
+
+detectDrives:
+	;detect floppy drives
+	mov eax,0
+	mov al,0x10
+	mov dx,0x70
+	out dx,al
+	mov dx,0x71
+	in al,dx
+	mov [floppyDrives],al
+	ret
 
 gdt_nulldesc:
 	dd 0

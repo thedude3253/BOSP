@@ -11,3 +11,7 @@ void readDisk(int drive, uint32_t offset, void *destination);    //Reads from th
 void writeDisk(int drive, uint32_t offset, void *source);   //Writes to the specified disk
 void *getBlock();   //Grabs one 256 byte block of data
 void freeBlock();   //Returns a block at an address to the wild
+void enableSpeaker(uint32_t frequency);
+void disableSpeaker();
+void wait(int milis);
+void beep(int milis,uint32_t freq);

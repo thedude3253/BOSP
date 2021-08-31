@@ -264,6 +264,8 @@ isr_no_err_stub 31
 isr_stub_32:
     push rdx
     push rax
+    mov al,1
+    mov [pitFired],al
     mov dx,0x0020
     mov al,0x20
     out dx,al
@@ -311,6 +313,9 @@ isr_stub_table:
     DQ isr_stub_%+i
 %assign i i+1
 %endrep
+
+global pitFired
+pitFired: db 0x00
 
 global keyMap
 keyMap: db 0x00	;doesn't exist

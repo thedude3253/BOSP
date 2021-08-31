@@ -47,6 +47,7 @@ void clearCommandBuffer() {
     }
     pointer = 0;
 }
+
 void parseCommand(char *s) {
     if(stringEqu("text",s)) {
         mode = 0;
@@ -54,20 +55,36 @@ void parseCommand(char *s) {
         clearScreen();
     }
     else if(stringEqu("help",s)) {
-        print("\nCommands:\nhelp - what you're running right now\ntext - activates the text editor/sandbox mode\njoke - says a funny");
+        print("\nCommands:\nhelp - what you're running right now\ntext - activates the text editor/sandbox mode\njoke - says a funny\nspeak/beep/unspeak - control the PC speaker\n");
         clearCommandBuffer();
     }
     else if(stringEqu("joke",s)) {
         print("\nbogos binted?");
         clearCommandBuffer();
     }
+    else if(stringEqu("speak",s)) {
+        enableSpeaker(1000);
+        clearCommandBuffer();
+    }
+    else if(stringEqu("beep",s)) {
+        beep(100,2200);
+        clearCommandBuffer();
+    }
+    else if(stringEqu("unspeak",s)) {
+        disableSpeaker();
+        clearCommandBuffer();
+    }
     else {
         printChar('\n');
         print(s);
     }
+    clearCommandBuffer();
 }
 
+
+
 extern uint16_t freeMemory;
+extern uint8_t floppyDrives;
 void _start() {
     setColor(0x10,0x0F);
     clearScreen();
@@ -77,10 +94,12 @@ void _start() {
     print("Number of free blocks: ");
     printByte((freeMemory/0x10) >> 8);
     printByte(freeMemory/0x10);
+    print("\nDrives: ");
+    printByte(floppyDrives);
     printChar('\n');
     println("Type help for a list of commands.");
     initIDT();
-    test();
+    beep(100,800);
     if(mode == 0x01) print("\n>");
     while(1) {
         unsigned char key = getKey();

@@ -10,7 +10,7 @@ CFLAGS = -ffreestanding -mno-red-zone -m64
 out/file.img : out/kernel.bin out/bootloader.bin
 	cat out/bootloader.bin out/kernel.bin > out/file.img
 
-out/kernel.bin : $(OBJS) $(OBJA)
+out/kernel.bin : $(OBJS) $(OBJA) out/loader.o
 	$(LD) -Ttext 0x8000 -T"link.ld" out/loader.o $(OBJA) $(OBJS)
 
 out/%.o : src/%.c
