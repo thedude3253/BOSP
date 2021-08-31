@@ -68,28 +68,78 @@ typedef struct memoryBlock {
     uint8_t *startAddress;
 } memoryBlock;
 
-memoryBlock heapMap[16];
+typedef struct mapPointer {
+    uint8_t used;
+    void *startAddress;
+    uint8_t runLength;
+} mapPointer;
+
+memoryBlock heapMap[256];
+mapPointer mapMap[256];
 
 void initHeap() {
-    uint16_t freeBlocks = freeMemory / 0x100;
+    uint16_t freeBlocks = freeMemory / 0x10;
     uint8_t *heapStart = &heap;
     for(int i = 0; i<freeBlocks; ++i) {
         memoryBlock *block = &heapMap[i];
         block->used = 0;
-        block->startAddress = heapStart + (i*0x100);
+        block->startAddress = heapStart + (i*0x10);
     }
 }
 
 void *malloc(unsigned long long size) {
-    //TODO: write code
+    int numblocks = size/0x10;
+    if(numblocks == 0) numblocks++;
+    int fakeBool = 0;
+    memoryBlock *block;
+    void *ret = 0;
+    for(int i = 0; i<256; ++i) {
+        if(!heapMap[i].used && !fakeBool) {
+            block = &heapMap[i];
+            ret = block->startAddress;
+            fakeBool++;
+        }
+        else if(!heapMap[i].used) {
+            fakeBool++;
+            if(fakeBool >= numblocks) {
+                int j = 0;
+                while(mapMap[j].used) {
+                    ++j;
+                }
+                mapPointer pointer = mapMap[j];
+                pointer.used = 1;
+                pointer.runLength = numblocks;
+                pointer.startAddress = ret;
+                return ret;
+            }
+        }
+        else {
+            fakeBool = 0;
+            ret = 0;
+        }
+    }
 }
 
 void free(void *mem) {
-    //TODO: write code
+    int j = 0;
+    int h = 0;
+    while(mapMap[j].startAddress != mem) {
+        ++j;
+        if(j>255) return;
+    }
+    while(heapMap[h].startAddress != mem) {
+        ++h;
+        if(h>255) return;
+    }
+    for(int i = 0; i<mapMap[j].runLength; ++i) {
+        heapMap[h].used = 0;
+        ++h;
+    }
+    mapMap[j].used = 0;
 }
 
 void *getBlock() {
-    for(int i = 0; i<16; ++i) {
+    for(int i = 0; i<256; ++i) {
         if(heapMap[i].used == 0) {
             heapMap[i].used = 1;
             return heapMap[i].startAddress;
@@ -99,10 +149,18 @@ void *getBlock() {
 }
 
 void freeBlock(void *mem) {
-    for(int i = 0; i<16; ++i) {
+    for(int i = 0; i<256; ++i) {
         if(heapMap[i].startAddress == mem) {
             heapMap[i].used = 0;
             return;
         }
     }
+}
+
+void readDisk(int drive, uint32_t offset, void *destination) {
+    //TODO: write code
+}
+
+void writeDisk(int drive, uint32_t offset, void *source) {
+    //TODO: write code
 }
